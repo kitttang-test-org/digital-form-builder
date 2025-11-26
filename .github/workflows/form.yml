@@ -32,7 +32,7 @@ jobs:
     - name: Check file paths
       id: check_files
       run: |
-        FORM_ONLY="false"
+        FORM_ONLY="true"
         echo "Checking changed files: ${{ steps.changed_files.outputs.all_changed_files }}"
 
         for file in ${{ steps.changed_files.outputs.all_changed_files }}; do
