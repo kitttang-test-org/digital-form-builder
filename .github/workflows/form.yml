@@ -48,5 +48,5 @@ jobs:
         echo "form_only=$FORM_ONLY" >> "$GITHUB_OUTPUT"
   
     - name: Send greeting
-      if: steps.check_files.outputs.form_only == "true"
+      if: steps.check_files.outputs.form_only == 'true'
       run: echo "Hello World"
