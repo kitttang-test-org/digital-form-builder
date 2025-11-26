@@ -36,12 +36,12 @@ jobs:
         echo "Checking changed files: ${{ steps.changed_files.outputs.all_changed_files }}"
 
         for file in ${{ steps.changed_files.outputs.all_changed_files }}; do
-          if ! [[ "$file" == "${{ env.FORM_FOLDER }}"* ]]; then
+          if ! [[ "$file" == "${{ env.FORMS_FOLDER }}"* ]]; then
             echo "Change outside ${{ env.FORM_FOLDER }}: $file, do not deploy"
             FORM_ONLY="false"
             break;
           else
-            echo "All changes inside ${{ env.FORM_FOLDER }}, deploy automatically"
+            echo "All changes inside ${{ env.FORMS_FOLDER }}, deploy automatically"
           fi
         done
 
