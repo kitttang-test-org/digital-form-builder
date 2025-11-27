@@ -15,7 +15,7 @@ on:
 jobs:
   check_files:
     outputs:
-      should_deploy: ${{ steps.check_files.form_only }}
+      should_deploy: ${{ steps.check_file_path.form_only }}
     runs-on: ubuntu-latest
     env:
       FORMS_FOLDER: 'runner/src/server/forms/'
@@ -42,7 +42,7 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     needs: check_files
-    if: needs.check_files.outputs.form_only == 'true'
+    if: needs.check_files.outputs.should_deploy == 'true'
     steps:
     - name: Call infra repo
       id: dispatch
