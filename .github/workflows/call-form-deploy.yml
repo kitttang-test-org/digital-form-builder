@@ -51,4 +51,4 @@ jobs:
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
         https://api.github.com/repos/kittang/actions-test/dispatches \
-        -d '{"event_type":"call-form-deploy"}
+        -d '{"event_type":"call-form-deploy"}'
