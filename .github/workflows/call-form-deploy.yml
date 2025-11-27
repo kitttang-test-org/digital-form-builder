@@ -9,6 +9,7 @@ on:
       - v2
     paths:
       - 'runner/src/server/forms/**'
+  workflow_dispatch: #
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
