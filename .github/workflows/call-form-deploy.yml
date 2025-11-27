@@ -46,8 +46,8 @@ jobs:
     if: needs.check_files.outputs.should_deploy == 'true'
     steps:
     - name: Call infra repo
-    - id: dispatch
-    - run: |
+      id: dispatch
+      run: |
         curl -X POST \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer ${{ secrets.REPO_TOKEN }}" \
