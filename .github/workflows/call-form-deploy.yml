@@ -29,7 +29,6 @@ jobs:
       id: check_file_path
       run: |
         NON_FORM_FILES=$(git diff --name-only HEAD^ HEAD -- ":(exclude)${{ env.FORM_FOLDER }}" | wc -l)
-        echo "Checking changed files: ${{ steps.changed_files.outputs.all_changed_files }}"
         if [ "$NON_FORM_FILES" -eq 0 ]; then
           echo "Only form changes found, able to deploy"
           FORM_ONLY="true"
