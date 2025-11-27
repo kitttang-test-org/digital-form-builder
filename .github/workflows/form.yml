@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      FORMS_FOLDER: 'runner/src/server/forms/'
+      FORM_FOLDER: 'runner/src/server/forms/'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a check for the folder then send a greeting using the runners shell
@@ -25,26 +25,20 @@ jobs:
       with: 
         fetch-depth: 0
 
-    - name: Get all changed files
-      id: changed_files
-      uses: tj-actions/changed-files@v44
-
     - name: Check file paths
       id: check_files
       run: |
-        FORM_ONLY="true"
+        NON_FORM_FILES=$(git diff --name-only HEAD^ HEAD -- ":(exclude)${{ env.FORM_FOLDER }}" | wc -l)
         echo "Checking changed files: ${{ steps.changed_files.outputs.all_changed_files }}"
 
-        for file in ${{ steps.changed_files.outputs.all_changed_files }}; do
-          if ! [[ "$file" == "${{ env.FORMS_FOLDER }}"* ]]; then
-            echo "Non-form change: $file, do not deploy"
-            FORM_ONLY="false"
-            break;
-          else
-            echo "Form change: $file"
-          fi
-        done
-
+        if [ "$NON_FORM_FILES" -eq 0 ]; then
+          echo "Only form changes found, able to deploy"
+          FORM_ONLY="true"
+        else
+          echo "Non-form changes found, do not deploy"
+          FORM_ONLY="false"
+        fi
+  
         echo "form_only=$FORM_ONLY" >> "$GITHUB_OUTPUT"
   
     - name: Send greeting
