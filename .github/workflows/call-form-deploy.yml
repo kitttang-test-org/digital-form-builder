@@ -15,7 +15,7 @@ on:
 jobs:
   check_files:
     outputs:
-      should_deploy: ${{ steps.check_file_path.form_only }}
+      should_deploy: ${{ steps.check_file_path.outputs.form_only }}
     runs-on: ubuntu-latest
     env:
       FORMS_FOLDER: 'runner/src/server/forms/'
