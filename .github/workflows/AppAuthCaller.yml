@@ -43,6 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: check_files
     if: needs.check_files.outputs.should_deploy == 'true'
+    permissions:
+      actions: write
     steps:
     - name: Generate token
       uses: actions/create-github-app-token@v2
