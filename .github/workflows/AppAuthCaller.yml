@@ -51,12 +51,12 @@ jobs:
         app-id: 2415279
         private-key: ${{ secrets.APP_KEY }}
         owner: ${{ vars.OWNER }}
-        repositories: ${{ vars.TARGET_REPOSITORY }}
+        repositories: ${{ vars.REPO }}
     - name: Call infra repo
       id: dispatch
       run: |
         curl -X POST \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer ${{ steps.app-token.outputs.token }}" \
-        https://api.github.com/repos/4{{ vars.TARGET_REPOSITORY }}/dispatches \
+        https://api.github.com/repos/${{ vars.OWNER }}/${{ vars.REPO }}/dispatches \
         -d '{"event_type":"call-form-deploy"}'
