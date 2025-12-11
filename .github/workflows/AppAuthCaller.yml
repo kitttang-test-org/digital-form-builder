@@ -64,7 +64,7 @@ jobs:
             repo: '${{ vars.REPO }}',
             workflow_id: 'auto-deploy.yml',
             ref: 'main',
-            input: {
+            inputs: {
               branch: 'v2',
               environment: 'test',
             }
