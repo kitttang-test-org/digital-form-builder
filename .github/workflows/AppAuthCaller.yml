@@ -44,7 +44,7 @@ jobs:
     needs: check_files
     if: needs.check_files.outputs.should_deploy == 'true'
     permissions:
-      actions: write
+      actions: read
     steps:
     - name: Generate token
       uses: actions/create-github-app-token@v2
