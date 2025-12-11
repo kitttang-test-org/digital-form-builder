@@ -59,8 +59,8 @@ jobs:
       with:
         script: |
           await github.rest.actions.createWorkflowDispatch({
-            owner: ${{ vars.OWNER }},
-            repo: ${{ vars.REPO }},
+            owner: '${{ vars.OWNER }}',
+            repo: '${{ vars.REPO }}',
             workflow_id: 'auto-deploy.yml',
             ref: 'main',
             input: {
