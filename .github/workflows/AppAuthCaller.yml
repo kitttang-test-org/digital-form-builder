@@ -1,0 +1,71 @@
+# This is a workflow that is automatically triggered when the forms folder is updated on branch v2
+
+name: App Auth Caller workflow
+
+# Controls when the action will run. Workflow runs automatically when the form folder is updated
+on:
+  push:
+    branches:
+      - v2
+    paths:
+      - 'runner/src/server/forms/**'
+  workflow_dispatch: #
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  check_files:
+    outputs:
+      should_deploy: ${{ steps.check_file_path.outputs.form_only }}
+    runs-on: ubuntu-latest
+    env:
+      FORMS_FOLDER: 'runner/src/server/forms/'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check file paths
+      id: check_file_path
+      run: |
+        NON_FORM_FILES=$(git diff --name-only HEAD^ HEAD -- ":(exclude)${{ env.FORMS_FOLDER }}" | wc -l)
+        if [ "$NON_FORM_FILES" -eq 0 ]; then
+          echo "Only form changes found, able to deploy"
+          FORM_ONLY="true"
+        else
+          echo "Non-form changes found, do not deploy"
+          FORM_ONLY="false"
+        fi
+
+        echo "form_only=$FORM_ONLY" >> "$GITHUB_OUTPUT"
+    
+  dispatch:
+    runs-on: ubuntu-latest
+    needs: check_files
+    if: needs.check_files.outputs.should_deploy == 'true'
+    permissions:
+      actions: read
+    steps:
+    - name: Generate token
+      uses: actions/create-github-app-token@v2
+      id: app-token
+      with:
+        app-id: 2415279
+        private-key: ${{ secrets.APP_KEY }}
+        owner: ${{ vars.OWNER }}
+        repositories: ${{ vars.REPO }}
+    - name: Call infra repo
+      uses: actions/github-script@v8
+      with:
+        github-token: ${{ steps.app-token.outputs.token }}
+        script: |
+          await github.rest.actions.createWorkflowDispatch({
+            owner: '${{ vars.OWNER }}',
+            repo: '${{ vars.REPO }}',
+            workflow_id: 'auto-deploy.yml',
+            ref: 'main',
+            inputs: {
+              branch: 'v2',
+              environment: 'test',
+            }
+          });
