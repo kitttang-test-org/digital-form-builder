@@ -9,7 +9,7 @@
           "name": "Filler",
           "options": {},
           "type": "RadiosField",
-          "title": "Filler Question",
+          "title": "Combined Test",
           "schema": {},
           "list": "YesNo"
         }
